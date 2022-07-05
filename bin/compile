@@ -11,7 +11,7 @@ INIT_SCRIPT="$BUILD_DIR/.profile.d/filebeat.sh"
 if [ -e $ENV_DIR/FILEBEAT_URL ]; then
   FILEBEAT_URL=$(cat $ENV_DIR/FILEBEAT_URL)  # config vars are created as files in an env dir with key/val as: <file_name>:<file_content>
 else
-  FILEBEAT_URL=https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-oss-7.10.2-linux-x86_64.tar.gz
+  FILEBEAT_URL="https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-oss-7.10.2-linux-x86_64.tar.gz"
 fi
 
 FILEBEAT=${FILEBEAT_URL##*/}  # The filebeat folder
@@ -19,6 +19,7 @@ FILEBEAT=${FILEBEAT_URL##*/}  # The filebeat folder
 echo "-----> Filebeat version: $FILEBEAT"
 
 mkdir -p $CACHE_DIR
+mkdir -p ${INIT_SCRIPT%/*}
 
 if [[ -f "$CACHE_DIR/$FILEBEAT" ]]; then
     echo "-----> Filebeat package already detected in cache, skipping download."
