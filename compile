@@ -1,0 +1,39 @@
+#!/bin/bash
+# bin/compile <build-dir> <cache-dir> <env-dir>
+
+echo 'Build and Compile Filebeat'
+BUILD_DIR=$1
+CACHE_DIR=$2
+ENV_DIR=$3
+
+INIT_SCRIPT="$BUILD_DIR/.profile.d/filebeat.sh"
+
+if [ -e $ENV_DIR/FILEBEAT_URL ]; then
+  FILEBEAT_URL=$(cat $ENV_DIR/FILEBEAT_URL)  # config vars are created as files in an env dir with key/val as: <file_name>:<file_content>
+else
+  FILEBEAT_URL=https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-oss-7.10.2-linux-x86_64.tar.gz
+fi
+
+FILEBEAT=${FILEBEAT_URL##*/}  # The filebeat folder
+
+echo "-------> Filebeat version: $FILEBEAT"
+
+mkdir -p $CACHE_DIR
+
+if [[ -f "$CACHE_DIR/$FILEBEAT" ]]; then
+    echo "-------> Filebeat package already detected in cache, skipping download."
+else
+    echo "-------> Using download url: $FILEBEAT_URL"
+    echo "-------> Downloading Filebeat into $CACHE_DIR ..."
+    curl --silent --location $FILEBEAT_URL -o $CACHE_DIR/$FILEBEAT
+    echo "-------> Done"
+fi
+
+echo "-------> Extracting Filebeat..."
+mkdir $BUILD_DIR/filebeat
+tar -xzf $CACHE_DIR/$FILEBEAT --strip 1 -C $BUILD_DIR/filebeat
+echo "-------> Done"
+
+echo "-------> Exporting Filebeat bin path"
+echo 'export PATH="$PATH:/app/filebeat" > $INIT_SCRIPT
+echo "-------> Done"

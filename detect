@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo "filebeat"
+exit 0
