@@ -19,7 +19,7 @@ FILEBEAT=${FILEBEAT_URL##*/}  # The filebeat folder
 echo "-----> Filebeat version: $FILEBEAT"
 
 if [ -e $ENV_DIR/FILEBEAT_LOGS_TARGET ]; then
-    FILEBEAT_LOGS_DIR=/app/$(cat $ENV_DIR/FILEBEAT_LOGS_TARGET)
+    FILEBEAT_LOGS_DIR=/app$(cat $ENV_DIR/FILEBEAT_LOGS_TARGET)
     echo "-----> Making Filebeat log target directory: $FILEBEAT_LOGS_DIR"
     mkdir -p $FILEBEAT_LOGS_DIR
 fi
