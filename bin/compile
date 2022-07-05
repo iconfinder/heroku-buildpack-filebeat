@@ -18,6 +18,11 @@ FILEBEAT=${FILEBEAT_URL##*/}  # The filebeat folder
 
 echo "-----> Filebeat version: $FILEBEAT"
 
+if [ -e $ENV_DIR/FILEBEAT_LOGS_TARGET ]; then
+    echo "-----> Making Filebeat log target directory: $FILEBEAT_LOGS_TARGET"
+    mkdir -p $FILEBEAT_LOGS_TARGET
+fi
+
 mkdir -p $CACHE_DIR
 mkdir -p ${INIT_SCRIPT%/*}
 
@@ -35,6 +40,6 @@ mkdir $BUILD_DIR/filebeat
 tar -xzf $CACHE_DIR/$FILEBEAT --strip 1 -C $BUILD_DIR/filebeat
 echo "-----> Done"
 
-echo "----->Exporting Filebeat bin path"
+echo "-----> Exporting Filebeat to PATH"
 echo 'export PATH="$PATH:/app/filebeat"' > $INIT_SCRIPT
 echo "-----> Done"
