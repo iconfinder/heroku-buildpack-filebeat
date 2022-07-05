@@ -1,7 +1,7 @@
 #!/bin/bash
 # bin/compile <build-dir> <cache-dir> <env-dir>
 
-echo 'Build and Compile Filebeat'
+echo '-----> Build and Compile Filebeat'
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
@@ -16,24 +16,24 @@ fi
 
 FILEBEAT=${FILEBEAT_URL##*/}  # The filebeat folder
 
-echo "-------> Filebeat version: $FILEBEAT"
+echo "-----> Filebeat version: $FILEBEAT"
 
 mkdir -p $CACHE_DIR
 
 if [[ -f "$CACHE_DIR/$FILEBEAT" ]]; then
-    echo "-------> Filebeat package already detected in cache, skipping download."
+    echo "-----> Filebeat package already detected in cache, skipping download."
 else
-    echo "-------> Using download url: $FILEBEAT_URL"
-    echo "-------> Downloading Filebeat into $CACHE_DIR ..."
+    echo "-----> Using download url: $FILEBEAT_URL"
+    echo "-----> Downloading Filebeat into $CACHE_DIR ..."
     curl --silent --location $FILEBEAT_URL -o $CACHE_DIR/$FILEBEAT
-    echo "-------> Done"
+    echo "-----> Done"
 fi
 
-echo "-------> Extracting Filebeat..."
+echo "-----> Extracting Filebeat..."
 mkdir $BUILD_DIR/filebeat
 tar -xzf $CACHE_DIR/$FILEBEAT --strip 1 -C $BUILD_DIR/filebeat
-echo "-------> Done"
+echo "-----> Done"
 
-echo "-------> Exporting Filebeat bin path"
-echo 'export PATH="$PATH:/app/filebeat" > $INIT_SCRIPT
-echo "-------> Done"
+echo "----->Exporting Filebeat bin path"
+echo 'export PATH="$PATH:/app/filebeat"' > $INIT_SCRIPT
+echo "-----> Done"
